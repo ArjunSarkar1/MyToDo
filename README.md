@@ -15,7 +15,7 @@
 <br />
 <div align="center">
 
-<span href="https://github.com/arjunsarkar1/MyToDo" style="font-size: 4em;">📝<span>
+<span href="https://github.com/arjunsarkar1/MyToDo" style="font-size: 10em;">📝<span>
 
 <h3 align="center">To Do App</h3>
 
