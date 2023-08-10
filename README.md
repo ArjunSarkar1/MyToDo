@@ -54,7 +54,7 @@
 
 ## About The Project
 
-[!Product Screenshot][product-screenshot]
+![Product Screenshot](product-screenshot)
 
 You can simply build, track, and manage your to-do list with its clear and user-friendly design.
 
