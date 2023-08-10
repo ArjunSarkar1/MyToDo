@@ -17,7 +17,7 @@ body {
   max-width: fit-content;
   justify-content: center;
   min-height: 100vh;
-  background: url("backdrop.png") center;
+  background: url("images/backdrop.png") center;
   background-color: white;
   background-size: cover;
 }

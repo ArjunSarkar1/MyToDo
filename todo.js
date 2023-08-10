@@ -2,9 +2,9 @@ const listInput = document.querySelector(".list-input");
 const completedList = document.querySelector(".completed-list");
 const uncompletedList = document.querySelector(".uncompleted-list");
 
-const popAudio = new Audio("pop.mp3");
+const popAudio = new Audio("audios/pop.mp3");
 popAudio.playbackRate = 1.75;
-const yayAudio = new Audio("yay.mp3");
+const yayAudio = new Audio("audios/yay.mp3");
 yayAudio.playbackRate = 2;
 
 let listItems = [];
