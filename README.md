@@ -14,7 +14,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-<span style="font-size: 2em;">:pencil:</span>
+
+<span href="https://github.com/arjunsarkar1/MyToDo" style="font-size: 2em;">:pencil:</span>
 
 <h3 align="center">To Do App</h3>
 
@@ -23,7 +24,7 @@
     <a href="https://ArjunSarkar1.github.io/MyToDo/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/arjunsarkar1/MyToDo">View Demo</a>
+    <a href="https://arjunsarkar1.github.io/MyToDo/">View Demo</a>
     ·
     <a href="https://github.com/arjunsarkar1/MyToDo/issues">Report Bug</a>
     ·
