@@ -14,13 +14,13 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/arjunsarkar1/MyToDo">:pencil:</a>
+<span style="font-size: 2em;">:pencil:</span>
 
 <h3 align="center">To Do App</h3>
 
   <p align="center">
   A simple task management application designed to help any user stay organized and complete daily tasks. <br> </br>
-    <a href="https://arjunsarkar1.github.io/MyToDo/"><strong>Explore the docs »</strong></a>
+    <a href="https://ArjunSarkar1.github.io/MyToDo/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/arjunsarkar1/MyToDo">View Demo</a>
