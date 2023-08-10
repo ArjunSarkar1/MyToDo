@@ -15,7 +15,7 @@
 <br />
 <div align="center">
 
-![Product Demo](images/list.png)
+<a href="https://github.com/arjunsarkar1/MyToDo">![Product Demo](images/list.png) </a>
 
 <h2 align="center">To Do App</h2>
 
@@ -54,7 +54,7 @@
 
 ## About The Project
 
-![Product Screenshot](product-screenshot)
+![Product Image](images/productImg.png)
 
 You can simply build, track, and manage your to-do list with its clear and user-friendly design.
 
@@ -106,4 +106,4 @@ Project Link: [https://github.com/arjunsarkar1/MyToDo](https://github.com/arjuns
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
-[product-screenshot]: images/productImg.png
+<!-- [product-screenshot]: images/productImg.png -->
