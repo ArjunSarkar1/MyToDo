@@ -15,7 +15,7 @@
 <br />
 <div align="center">
 
-# :pencil:
+<h1 style="font-size: 5rem"> :pencil: </ h1>
 
 <h2 align="center">To Do App</h2>
 
