@@ -15,9 +15,9 @@
 <br />
 <div align="center">
 
-<span href="https://github.com/arjunsarkar1/MyToDo" style="font-size: 10em;">📝<span>
+<a href="https://github.com/arjunsarkar1/MyToDo" style="font-size: 5em;">📝</a>
 
-<h3 align="center">To Do App</h3>
+<h2 align="center">To Do App</h2>
 
   <p align="center">
   A simple task management application designed to help any user stay organized and complete daily tasks. <br> </br>
