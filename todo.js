@@ -10,9 +10,35 @@ popAudio.playbackRate = 1.75;
 const yayAudio = new Audio("audios/yay.mp3");
 yayAudio.playbackRate = 2;
 
+const whiteNoiseAudio = document.getElementById('white-noise-audio');
+const breakMusicAudio = document.getElementById('break-music-audio');
+
 let listItems = [];
 let currentPriorityFilter = "All";
 let isPrioritySorted = false;
+
+// Pomodoro Timer Logic
+const pomodoroTimerDisplay = document.getElementById('pomodoro-timer');
+const pomodoroModeDisplay = document.getElementById('pomodoro-mode');
+const pomodoroSessionCount = document.getElementById('pomodoro-session-count');
+const pomodoroStartBtn = document.getElementById('pomodoro-start');
+const pomodoroPauseBtn = document.getElementById('pomodoro-pause');
+const pomodoroResetBtn = document.getElementById('pomodoro-reset');
+
+const timeConversion = 60;
+
+const POMODORO = 25 * timeConversion; // 25 min
+const SHORT_BREAK = 5 * timeConversion; // 5 min
+const LONG_BREAK = 15 * timeConversion; // 15 min
+const SESSIONS_BEFORE_LONG = 4;
+
+let pomodoroState = {
+  mode: 'Pomodoro', // 'Pomodoro', 'Short Break', 'Long Break'
+  timeLeft: POMODORO,
+  timer: null,
+  running: false,
+  session: 1,
+};
 
 window.onload = () => {
   let storageToDoItems = localStorage.getItem("listItems");
@@ -284,3 +310,140 @@ function confettiBurst(canvasId, direction) {
   }
   draw();
 }
+
+function updatePomodoroUI() {
+  // Timer display
+  const min = String(Math.floor(pomodoroState.timeLeft / 60)).padStart(2, '0');
+  const sec = String(pomodoroState.timeLeft % 60).padStart(2, '0');
+  pomodoroTimerDisplay.textContent = `${min}:${sec}`;
+  // Mode display
+  pomodoroModeDisplay.textContent = pomodoroState.mode === 'Pomodoro' ? 'Timer' : pomodoroState.mode;
+  // Session count logic
+  if (pomodoroState.mode === 'Pomodoro') {
+    pomodoroSessionCount.textContent = `Session: ${pomodoroState.session}/${SESSIONS_BEFORE_LONG}`;
+  } else if (pomodoroState.mode === 'Short Break') {
+    pomodoroSessionCount.textContent = 'Short Break';
+  } else {
+    pomodoroSessionCount.textContent = 'Long Break';
+  }
+}
+
+// Music logic
+function playWhiteNoise() {
+  breakMusicAudio.pause();
+  // Only play if not already playing
+  if (whiteNoiseAudio.paused) {
+    whiteNoiseAudio.play();
+  }
+}
+function pauseWhiteNoise() {
+  if (!whiteNoiseAudio.paused) {
+    whiteNoiseAudio.pause();
+  }
+}
+function playBreakMusic() {
+  whiteNoiseAudio.pause();
+  if (breakMusicAudio.paused) {
+    breakMusicAudio.play();
+  }
+}
+function pauseBreakMusic() {
+  if (!breakMusicAudio.paused) {
+    breakMusicAudio.pause();
+  }
+}
+// Loop music if it ends before timer
+whiteNoiseAudio.addEventListener('ended', () => {
+  whiteNoiseAudio.currentTime = 0;
+  whiteNoiseAudio.play();
+});
+breakMusicAudio.addEventListener('ended', () => {
+  breakMusicAudio.currentTime = 0;
+  breakMusicAudio.play();
+});
+
+function setPomodoroMode(mode) {
+  pomodoroState.mode = mode;
+  if (mode === 'Pomodoro') {
+    pomodoroState.timeLeft = POMODORO;
+  }
+  if (mode === 'Short Break') {
+    pomodoroState.timeLeft = SHORT_BREAK;
+  }
+  if (mode === 'Long Break') {
+    pomodoroState.timeLeft = LONG_BREAK;
+  }
+  updatePomodoroUI();
+  // Play correct audio
+  if (mode === 'Pomodoro') {
+    playWhiteNoise();
+  } else {
+    playBreakMusic();
+  }
+}
+
+function pomodoroTick() {
+  if (pomodoroState.timeLeft > 0) {
+    pomodoroState.timeLeft--;
+    updatePomodoroUI();
+  } else {
+    clearInterval(pomodoroState.timer);
+    pomodoroState.running = false;
+    // Auto-switch mode
+    if (pomodoroState.mode === 'Pomodoro') {
+      if (pomodoroState.session < SESSIONS_BEFORE_LONG) {
+        pomodoroState.session++;
+        setPomodoroMode('Short Break');
+      } else {
+        setPomodoroMode('Long Break');
+      }
+    } else if (pomodoroState.mode === 'Short Break') {
+      setPomodoroMode('Pomodoro');
+    } else if (pomodoroState.mode === 'Long Break') {
+      pomodoroState.session = 1;
+      setPomodoroMode('Pomodoro');
+    }
+    updatePomodoroUI();
+    // Automatically start the next session
+    startPomodoro();
+  }
+}
+
+function startPomodoro() {
+  if (!pomodoroState.running) {
+    pomodoroState.running = true;
+    pomodoroState.timer = setInterval(pomodoroTick, 1000);
+    // Play correct audio
+    if (pomodoroState.mode === 'Pomodoro') {
+      playWhiteNoise();
+    } else {
+      playBreakMusic();
+    }
+  }
+}
+
+function pausePomodoro() {
+  if (pomodoroState.running) {
+    clearInterval(pomodoroState.timer);
+    pomodoroState.running = false;
+    pauseWhiteNoise();
+    pauseBreakMusic();
+  }
+}
+
+function resetPomodoro() {
+  pausePomodoro();
+  pomodoroState.mode = 'Pomodoro';
+  pomodoroState.session = 1;
+  pomodoroState.timeLeft = POMODORO;
+  whiteNoiseAudio.currentTime = 0;
+  breakMusicAudio.currentTime = 0;
+  updatePomodoroUI();
+}
+
+pomodoroStartBtn.addEventListener('click', startPomodoro);
+pomodoroPauseBtn.addEventListener('click', pausePomodoro);
+pomodoroResetBtn.addEventListener('click', resetPomodoro);
+
+// Initial UI
+updatePomodoroUI();

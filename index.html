@@ -7,101 +7,116 @@
     <link rel="stylesheet" href="todo.css" />
   </head>
   <body>
-    <div class="webApp">
-      <h1>✏️ To Do List</h1>
-      <div class="input-row">
-        <input
-          type="text"
-          class="list-input"
-          placeholder="Write your list . . ."
-        />
-        <select class="priority-select">
-          <option value="High">High</option>
-          <option value="Medium" selected>Medium</option>
-          <option value="Low">Low</option>
-        </select>
-      </div>
-      <div class="priority-controls">
-        <label for="priority-filter">Filter:</label>
-        <select id="priority-filter" class="priority-filter">
-          <option value="All" selected>All</option>
-          <option value="High">High</option>
-          <option value="Medium">Medium</option>
-          <option value="Low">Low</option>
-        </select>
-        <button class="priority-sort">Sort by Priority</button>
-      </div>
-      <div class="progress-title">In Progress:</div>
-      <div class="todo-list">
-        <div class="uncompleted-list">
-          <div class="list-items">
-            <span> <input type="checkbox" /> Take a shower </span>
-            <a href="#">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="icon icon-tabler icon-tabler-x"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M18 6l-12 12"></path>
-                <path d="M6 6l12 12"></path>
-              </svg>
-            </a>
-          </div>
-          <div class="list-items">
-            <span> <input type="checkbox" /> Take a shower </span>
-            <a href="#">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="icon icon-tabler icon-tabler-x"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M18 6l-12 12"></path>
-                <path d="M6 6l12 12"></path>
-              </svg>
-            </a>
-          </div>
+    <audio id="white-noise-audio" src="audios/whiteNoiseMusic.mkv" loop preload="auto"></audio>
+    <audio id="break-music-audio" src="audios/breakMusic.webm" loop preload="auto"></audio>
+    <div class="main-layout">
+      <div id="pomodoro-container">
+        <h1 class="pomodoro-title">⏳ Pomodoro</h1>
+        <div id="pomodoro-mode">Timer</div>
+        <div id="pomodoro-timer">25:00</div>
+        <div id="pomodoro-controls">
+          <button id="pomodoro-start">Start</button>
+          <button id="pomodoro-pause">Pause</button>
+          <button id="pomodoro-reset">Reset</button>
         </div>
-        <div class="completed-list">
-          <div class="completed-title">Completed: (1/3)</div>
-          <div class="list-items">
-            <span> <input type="checkbox" /> Take a shower </span>
-            <a href="#">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="icon icon-tabler icon-tabler-x"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M18 6l-12 12"></path>
-                <path d="M6 6l12 12"></path>
-              </svg>
-            </a>
+        <div id="pomodoro-session-count">Session: 1/4</div>
+      </div>
+      <div class="webApp">
+        <h1>✏️ To Do List</h1>
+        <div class="input-row">
+          <input
+            type="text"
+            class="list-input"
+            placeholder="Write your list . . ."
+          />
+          <select class="priority-select">
+            <option value="High">High</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div class="priority-controls">
+          <label for="priority-filter">Filter:</label>
+          <select id="priority-filter" class="priority-filter">
+            <option value="All" selected>All</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+          <button class="priority-sort">Sort by Priority</button>
+        </div>
+        <div class="progress-title">In Progress:</div>
+        <div class="todo-list">
+          <div class="uncompleted-list">
+            <div class="list-items">
+              <span> <input type="checkbox" /> Take a shower </span>
+              <a href="#">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-x"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M18 6l-12 12"></path>
+                  <path d="M6 6l12 12"></path>
+                </svg>
+              </a>
+            </div>
+            <div class="list-items">
+              <span> <input type="checkbox" /> Take a shower </span>
+              <a href="#">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-x"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M18 6l-12 12"></path>
+                  <path d="M6 6l12 12"></path>
+                </svg>
+              </a>
+            </div>
           </div>
-          <div></div>
-          <div></div>
+          <div class="completed-list">
+            <div class="completed-title">Completed: (1/3)</div>
+            <div class="list-items">
+              <span> <input type="checkbox" /> Take a shower </span>
+              <a href="#">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon icon-tabler icon-tabler-x"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  fill="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M18 6l-12 12"></path>
+                  <path d="M6 6l12 12"></path>
+                </svg>
+              </a>
+            </div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
       </div>
     </div>
