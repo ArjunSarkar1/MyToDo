@@ -1,6 +1,9 @@
 const listInput = document.querySelector(".list-input");
 const completedList = document.querySelector(".completed-list");
 const uncompletedList = document.querySelector(".uncompleted-list");
+const prioritySelect = document.querySelector(".priority-select");
+const priorityFilter = document.querySelector(".priority-filter");
+const prioritySortBtn = document.querySelector(".priority-sort");
 
 const popAudio = new Audio("audios/pop.mp3");
 popAudio.playbackRate = 1.75;
@@ -8,6 +11,8 @@ const yayAudio = new Audio("audios/yay.mp3");
 yayAudio.playbackRate = 2;
 
 let listItems = [];
+let currentPriorityFilter = "All";
+let isPrioritySorted = false;
 
 window.onload = () => {
   let storageToDoItems = localStorage.getItem("listItems");
@@ -26,16 +31,17 @@ listInput.onkeyup = (e) => {
    */
   let val = e.target.value.replace(/^\s+/, "");
   if (val && e.keyCode == 13 /* Enter key */) {
-    addToDoItem(val);
+    addToDoItem(val, prioritySelect.value);
     listInput.value = ""; // resetting the input box for the next to do entry
   }
 };
 
-function addToDoItem(textInput) {
+function addToDoItem(textInput, priority) {
   listItems.push({
     id: Date.now(),
     textInput,
-    isComplete: false, // default value of boolean
+    isComplete: false,
+    priority: priority || "Medium",
   });
 
   saveAndRender();
@@ -75,8 +81,17 @@ function save() {
 
 // Rendering
 function renderList() {
-  let uncompletedToDos = listItems.filter((item) => !item.isComplete);
-  let completedToDos = listItems.filter((item) => item.isComplete);
+  let filteredItems = listItems.filter(item => {
+    if (currentPriorityFilter === "All") return true;
+    return item.priority === currentPriorityFilter;
+  });
+
+  if (isPrioritySorted) {
+    filteredItems = filteredItems.slice().sort((a, b) => priorityValue(b.priority) - priorityValue(a.priority));
+  }
+
+  let uncompletedToDos = filteredItems.filter((item) => !item.isComplete);
+  let completedToDos = filteredItems.filter((item) => item.isComplete);
 
   completedList.innerHTML = "";
   uncompletedList.innerHTML = "";
@@ -90,7 +105,7 @@ function renderList() {
   }
 
   if (completedToDos.length >= 1) {
-    completedList.innerHTML = `<div class='completed-title'>Completed: (${completedToDos.length} / ${listItems.length})</div>`;
+    completedList.innerHTML = `<div class='completed-title'>Completed: (${completedToDos.length} / ${filteredItems.length})</div>`;
 
     completedToDos.forEach((todo) => {
       completedList.append(buildToDoItem(todo));
@@ -101,6 +116,15 @@ function renderList() {
 function saveAndRender() {
   save();
   renderList();
+}
+
+function priorityValue(priority) {
+  switch(priority) {
+    case "High": return 3;
+    case "Medium": return 2;
+    case "Low": return 1;
+    default: return 0;
+  }
 }
 
 // Building the to do list items
@@ -123,6 +147,13 @@ function buildToDoItem(todo) {
     e.target.checked ? markAsCompleted(id) : markAsUncompleted(id);
   };
 
+  toDoText.prepend(toDoInputCheckBox);
+
+  // priority badge (now grouped with X)
+  const priorityBadge = document.createElement("span");
+  priorityBadge.className = `priority-badge priority-${(todo.priority || "Medium").toLowerCase()}`;
+  priorityBadge.innerText = todo.priority || "Medium";
+
   // delete button
   const toDoRemove = document.createElement("a");
   toDoRemove.href = "#";
@@ -141,16 +172,32 @@ function buildToDoItem(todo) {
   <path d="M18 6l-12 12"></path>
   <path d="M6 6l12 12"></path>
 </svg>`;
-
   toDoRemove.onclick = (e) => {
     let id = e.target.closest(".list-items").dataset.id;
     popAudio.play();
     removeToDoItem(id);
   };
 
-  toDoText.prepend(toDoInputCheckBox);
+  // group badge and X in a container
+  const rightGroup = document.createElement("div");
+  rightGroup.className = "right-group";
+  rightGroup.appendChild(priorityBadge);
+  rightGroup.appendChild(toDoRemove);
+
   theToDo.appendChild(toDoText);
-  theToDo.appendChild(toDoRemove);
+  theToDo.appendChild(rightGroup);
 
   return theToDo;
 }
+
+// Priority filter and sort event listeners
+priorityFilter.addEventListener("change", (e) => {
+  currentPriorityFilter = e.target.value;
+  renderList();
+});
+
+prioritySortBtn.addEventListener("click", () => {
+  isPrioritySorted = !isPrioritySorted;
+  prioritySortBtn.textContent = isPrioritySorted ? "Unsort" : "Sort by Priority";
+  renderList();
+});

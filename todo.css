@@ -13,28 +13,65 @@ body {
   font-family: "Poppins", sans-serif;
   align-items: center;
   display: flex;
-  margin: auto;
-  max-width: fit-content;
+  margin: 0;
   justify-content: center;
   min-height: 100vh;
   background: url("images/backdrop.png") center;
   background-color: white;
   background-size: cover;
+  position: relative;
+  width: 100vw;
+  min-width: 0;
+  overflow-x: hidden;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(0,0,0,0.15) 100%);
+  z-index: 0;
+  pointer-events: none;
 }
 
 .webApp {
   color: whitesmoke;
-  background-color: #ffffff21;
-  width: var(--webApp-width);
-  padding: 2rem;
-  box-shadow: 0 10px 55px -10px black;
+  background: rgba(255,255,255,0.18);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   border-radius: var(--radius);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  width: 100%;
+  max-width: var(--webApp-width);
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+  transition: box-shadow 0.3s;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 700px) {
+  .webApp {
+    width: 100vw;
+    padding: 1rem;
+  }
+  .webApp h1 {
+    font-size: 32px;
+  }
+  .list-input {
+    font-size: 16px;
+    padding: 0.8rem 1rem;
+  }
 }
 
 .webApp h1 {
   margin-top: 0;
   margin-bottom: 30px;
   font-size: 45px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 .list-input {
@@ -42,17 +79,25 @@ body {
   margin-top: -3px;
   margin-bottom: 30px;
   border-radius: var(--radius);
-  border: none;
+  border: 1.5px solid rgba(255,255,255,0.35);
   padding: 1rem 1.4rem;
   font-size: 20px;
   font-family: "Poppins";
-  background-color: whitesmoke;
+  background: rgba(255,255,255,0.65);
   font-weight: lighter;
-  color: black;
+  color: #222;
+  box-shadow: 0 2px 8px rgba(31,38,135,0.07);
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.list-input:focus {
+  border: 1.5px solid #a1c4fd;
+  box-shadow: 0 0 0 2px #a1c4fd33;
 }
 
 .list-input::placeholder {
-  color: black;
+  color: #444;
+  opacity: 0.7;
 }
 
 .todo-list,
@@ -64,13 +109,24 @@ body {
 }
 
 .list-items {
-  background-color: whitesmoke;
-  padding: 1rem 1rem;
+  background: rgba(255,255,255,0.32);
   border-radius: var(--radius);
+  border: 1.2px solid rgba(255,255,255,0.25);
+  box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.13);
+  padding: 1rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: black;
+  color: #222;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  transition: box-shadow 0.2s, background 0.2s;
+}
+.list-items:hover {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  background: rgba(255,255,255,0.42);
 }
 
 .list-items span {
@@ -81,11 +137,26 @@ body {
 
 .list-items input[type="checkbox"] {
   cursor: pointer;
-  width: 30px;
+  width: 24px;
+  height: 24px;
+  accent-color: #a1c4fd;
+  border-radius: 6px;
+  transition: box-shadow 0.2s;
 }
 
 .list-items a {
   color: rgb(104, 104, 104);
+  background: rgba(255,255,255,0.18);
+  border-radius: 50%;
+  padding: 4px;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.2rem;
+}
+.list-items a:hover {
+  background: rgba(255,255,255,0.35);
 }
 
 .list-items a svg {
@@ -99,16 +170,215 @@ body {
   margin-bottom: 15px;
   font-size: 25px;
   font-weight: 550;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 .completed-title {
   margin-top: 30px;
-  font-size: 20px;
   font-size: 25px;
   font-weight: 550;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.12);
 }
 
 .completed-list .list-items {
-  background-color: rgb(169, 244, 219);
+  background: rgba(169, 244, 219, 0.45);
   text-decoration: line-through;
+  color: #222;
+  border: 1.2px solid rgba(169,244,219,0.35);
+}
+
+/* Animations for adding/removing tasks */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-20px); }
+}
+.list-items {
+  animation: fadeIn 0.5s;
+}
+
+/* Scrollbar styling for lists */
+.uncompleted-list, .completed-list {
+  max-height: 40vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #a1c4fd #ffffff33;
+}
+.uncompleted-list::-webkit-scrollbar, .completed-list::-webkit-scrollbar {
+  width: 8px;
+}
+.uncompleted-list::-webkit-scrollbar-thumb, .completed-list::-webkit-scrollbar-thumb {
+  background: #a1c4fd;
+  border-radius: 8px;
+}
+
+/* Responsive font size for smaller screens */
+@media (max-width: 500px) {
+  .webApp {
+    width: 100vw;
+    padding: 0.5rem;
+  }
+  .webApp h1 {
+    font-size: 24px;
+  }
+  .progress-title, .completed-title {
+    font-size: 18px;
+  }
+  .list-input {
+    font-size: 14px;
+    padding: 0.6rem 0.8rem;
+  }
+  .list-items {
+    font-size: 14px;
+    padding: 0.7rem 0.7rem;
+  }
+}
+
+/* Input row for task and priority - embed select inside input */
+.input-row {
+  display: flex;
+  gap: 0.7rem;
+  align-items: stretch;
+  margin-bottom: 1.2rem;
+  width: 100%;
+  position: relative;
+}
+.input-row .list-input {
+  flex: 1 1 0;
+  padding-right: 6.5rem;
+  position: relative;
+}
+.input-row .priority-select {
+  position: absolute;
+  right: 0.7rem;
+  top: 33%;
+  transform: translateY(-50%);
+  min-width: 5.5rem;
+  height: 2.2rem;
+  z-index: 2;
+  background: rgba(255,255,255,0.85);
+  border: 6.2px solid rgba(255,255,255,0.35);
+  box-shadow: 0 2px 8px rgba(31,38,135,0.07);
+  font-size: 1rem;
+  color: #222;
+  border-radius: var(--radius);
+  outline: none;
+  padding: 0 0.7rem;
+  font-family: "Poppins";
+}
+.input-row .priority-select:focus {
+  border: 1.5px solid #a1c4fd;
+  box-shadow: 0 0 0 2px #a1c4fd33;
+}
+
+/* Priority filter and sort controls */
+.priority-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+}
+.priority-filter {
+  border-radius: var(--radius);
+  border: 6.5px solid rgba(255,255,255,0.65);
+  padding: 0.2rem 1rem;
+  font-size: 1rem;
+  background: rgba(255,255,255);
+  color: #222;
+  font-family: "Poppins";
+  outline: none;
+  box-shadow: 0 2px 8px rgba(31,38,135,0.07);
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.priority-sort {
+  border-radius: var(--radius);
+  border: 1.2px solid rgba(255,255,255,0.25);
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  font-family: "Poppins";
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.13);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+  outline: none;
+}
+.priority-sort:hover {
+  background: rgba(161,196,253,0.32);
+  color: #fff;
+}
+
+/* Priority badge styles */
+.priority-badge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  margin-right: 0;
+  padding: 0.2em 0.8em;
+  border-radius: 999px;
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  vertical-align: middle;
+  box-shadow: 0 1px 4px rgba(31,38,135,0.07);
+  user-select: none;
+}
+.priority-high {
+  background: rgba(255, 77, 77, 0.45);
+  color: #a1001a;
+  border: 1.2px solid #d7263dcc;
+  text-shadow: 0 1px 2px #fff8;
+}
+.priority-medium {
+  background: rgba(255, 206, 86, 0.45);
+  color: #b97a00;
+  border: 1.2px solid #ffb400cc;
+  text-shadow: 0 1px 2px #fff8;
+}
+.priority-low {
+  background: rgba(102, 212, 102, 0.45);
+  color: #0b5e2a;
+  border: 1.2px solid #1fa463cc;
+  text-shadow: 0 1px 2px #fff8;
+}
+.list-items .priority-badge {
+  margin-left: 0.5rem;
+  margin-right: 0.2rem;
+  align-self: center;
+}
+
+@media (max-width: 700px) {
+  .input-row {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+    width: 100%;
+    position: static;
+  }
+  .input-row .priority-select {
+    position: static;
+    transform: none;
+    width: 100%;
+    min-width: 0;
+    margin-bottom: 0.5rem;
+    height: 2.2rem;
+  }
+  .priority-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+}
+
+.right-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }

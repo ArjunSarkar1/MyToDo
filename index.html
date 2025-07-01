@@ -9,11 +9,28 @@
   <body>
     <div class="webApp">
       <h1>✏️ To Do List</h1>
-      <input
-        type="text"
-        class="list-input"
-        placeholder="Write your list . . ."
-      />
+      <div class="input-row">
+        <input
+          type="text"
+          class="list-input"
+          placeholder="Write your list . . ."
+        />
+        <select class="priority-select">
+          <option value="High">High</option>
+          <option value="Medium" selected>Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+      <div class="priority-controls">
+        <label for="priority-filter">Filter:</label>
+        <select id="priority-filter" class="priority-filter">
+          <option value="All" selected>All</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+        <button class="priority-sort">Sort by Priority</button>
+      </div>
       <div class="progress-title">In Progress:</div>
       <div class="todo-list">
         <div class="uncompleted-list">
