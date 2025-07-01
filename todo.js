@@ -62,6 +62,9 @@ function markAsCompleted(id) {
   });
   yayAudio.play();
   saveAndRender();
+  
+  // Trigger confetti
+  launchConfetti();
 }
 
 function markAsUncompleted(id) {
@@ -101,7 +104,7 @@ function renderList() {
       uncompletedList.append(buildToDoItem(todo));
     });
   } else {
-    uncompletedList.innerHTML = `<div class='empty'>No uncompleted tasks :(</div>`;
+    uncompletedList.innerHTML = `<div class='empty'>No tasks in progress...</div>`;
   }
 
   if (completedToDos.length >= 1) {
@@ -134,9 +137,23 @@ function buildToDoItem(todo) {
   theToDo.setAttribute("data-id", todo.id);
   theToDo.className = "list-items";
 
-  // building a to do item texts
-  const toDoText = document.createElement("span");
-  toDoText.innerHTML = todo.textInput;
+  // Main row: checkbox, text, X icon
+  const mainRow = document.createElement("div");
+  mainRow.className = "main-row";
+  mainRow.style.display = "flex";
+  mainRow.style.alignItems = "center";
+  mainRow.style.justifyContent = "space-between";
+  mainRow.style.width = "100%";
+
+  // Left: checkbox + text
+  const leftGroup = document.createElement("span");
+  leftGroup.style.display = "flex";
+  leftGroup.style.alignItems = "center";
+  leftGroup.style.gap = "0.75rem";
+  leftGroup.style.minWidth = "0";
+  leftGroup.style.wordBreak = "break-word";
+  leftGroup.style.flex = "1 1 0";
+  leftGroup.className = (todo.textInput || '').length > 40 ? 'long-text' : '';
 
   // checkbox for list
   const toDoInputCheckBox = document.createElement("input");
@@ -147,12 +164,14 @@ function buildToDoItem(todo) {
     e.target.checked ? markAsCompleted(id) : markAsUncompleted(id);
   };
 
-  toDoText.prepend(toDoInputCheckBox);
+  // text
+  const toDoText = document.createElement("span");
+  toDoText.textContent = todo.textInput;
+  toDoText.style.flex = "1 1 0";
+  toDoText.style.wordBreak = "break-word";
 
-  // priority badge (now grouped with X)
-  const priorityBadge = document.createElement("span");
-  priorityBadge.className = `priority-badge priority-${(todo.priority || "Medium").toLowerCase()}`;
-  priorityBadge.innerText = todo.priority || "Medium";
+  leftGroup.appendChild(toDoInputCheckBox);
+  leftGroup.appendChild(toDoText);
 
   // delete button
   const toDoRemove = document.createElement("a");
@@ -178,14 +197,17 @@ function buildToDoItem(todo) {
     removeToDoItem(id);
   };
 
-  // group badge and X in a container
-  const rightGroup = document.createElement("div");
-  rightGroup.className = "right-group";
-  rightGroup.appendChild(priorityBadge);
-  rightGroup.appendChild(toDoRemove);
+  mainRow.appendChild(leftGroup);
+  mainRow.appendChild(toDoRemove);
 
-  theToDo.appendChild(toDoText);
-  theToDo.appendChild(rightGroup);
+  // Second row: priority badge
+  const priorityBadge = document.createElement("span");
+  priorityBadge.className = `priority-badge priority-${(todo.priority || "Medium").toLowerCase()}`;
+  priorityBadge.innerText = todo.priority || "Medium";
+  priorityBadge.style.marginTop = "0.5rem";
+
+  theToDo.appendChild(mainRow);
+  theToDo.appendChild(priorityBadge);
 
   return theToDo;
 }
@@ -201,3 +223,64 @@ prioritySortBtn.addEventListener("click", () => {
   prioritySortBtn.textContent = isPrioritySorted ? "Unsort" : "Sort by Priority";
   renderList();
 });
+
+// Confetti animation
+function launchConfetti() {
+  confettiBurst('confetti-left', 'right');
+  confettiBurst('confetti-right', 'left');
+}
+
+function confettiBurst(canvasId, direction) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width = window.innerWidth / 2;
+  const H = canvas.height = window.innerHeight;
+  const confettiCount = 80;
+  const confetti = [];
+  const colors = ['#f7b801', '#ea5455', '#7367f0', '#32ccbc', '#f6416c', '#43e97b', '#38f9d7', '#fbc2eb', '#fd6e6a'];
+  for (let i = 0; i < confettiCount; i++) {
+    confetti.push({
+      x: direction === 'right' ? 0 : W,
+      y: H,
+      r: Math.random() * 6 + 4,
+      d: Math.random() * confettiCount,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      tilt: Math.random() * 10 - 10,
+      tiltAngleIncremental: (Math.random() * 0.07) + .05,
+      tiltAngle: 0,
+      vx: (direction === 'right' ? 1 : -1) * (Math.random() * 4 + 2),
+      vy: -(Math.random() * 4 + 4)
+    });
+  }
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    for (let i = 0; i < confetti.length; i++) {
+      let c = confetti[i];
+      ctx.beginPath();
+      ctx.lineWidth = c.r;
+      ctx.strokeStyle = c.color;
+      ctx.moveTo(c.x + c.tilt + c.r / 3, c.y);
+      ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 3);
+      ctx.stroke();
+    }
+    update();
+    frame++;
+    if (frame < 70) {
+      requestAnimationFrame(draw);
+    } else {
+      ctx.clearRect(0, 0, W, H);
+    }
+  }
+  function update() {
+    for (let i = 0; i < confetti.length; i++) {
+      let c = confetti[i];
+      c.x += c.vx;
+      c.y += c.vy;
+      c.tiltAngle += c.tiltAngleIncremental;
+      c.tilt = Math.sin(c.tiltAngle) * 15;
+    }
+  }
+  draw();
+}
