@@ -85,8 +85,28 @@ You can simply build, track, and manage your to-do list with its clear and user-
 
 <!-- USAGE EXAMPLES -->
 
+## Features
+
+- ✨ **Modern Glassmorphism UI**: Beautiful, frosted-glass panels and cards for a clean, modern look.
+- 📱 **Fully Responsive**: Works perfectly on desktop, tablet, and mobile.
+- 📝 **To Do List**: Add, complete, delete, and filter tasks.
+- 🏷️ **Priority Levels**: Tag tasks as High, Medium, or Low. Filter and sort by priority. All priority badges are visually consistent.
+- 🔔 **Persistent Storage**: Your tasks are saved in your browser (localStorage).
+- 🎉 **Confetti Animation**: Celebrate completed tasks with confetti from both corners.
+- ⏳ **Pomodoro Timer**: Built-in Pomodoro system with start/pause/reset, session counter, and automatic session switching.
+- 🎵 **Focus & Break Music**: White noise plays during Pomodoro, break music during breaks (auto-looping, seamless transitions).
+- 🦾 **Accessibility**: Keyboard navigation, clear contrast, and screen reader-friendly.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Usage
 
+1. **Add a Task**: Type in the input and press Enter. Select a priority if desired.
+2. **Complete a Task**: Check the box. Completed tasks move to the Completed section and trigger confetti.
+3. **Delete a Task**: Click the X icon.
+4. **Filter/Sort**: Use the dropdowns and sort button to organize your tasks by priority.
+5. **Pomodoro Timer**: Use the timer above the To Do List. Start, pause, or reset. Music plays automatically for focus and breaks. Sessions continue automatically.
+6. **Responsive**: Use on any device layout; always fit the screen.
 
 _For more examples, please refer to the [Documentation](https://github.com/ArjunSarkar1/MyToDo.git)_
 
